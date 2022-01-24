@@ -1,28 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import style from './index.module.css';
+import MessageInput from './components/MessageInput/MessageInput';
+import MessageList from './components/MessageList/MessageList';
 import './index.css';
 
 
-const Message = ({text}) => {
-	const [innerText, setInnerText] = useState (text);
+const App = () => {
+  
+  const [messages, setMessages] = useState([])
+  
+  useEffect(() => {
+    const LastMessage = messages[messages.length - 1];
+    let timerId = null;
 
-	return (
-		<div className={style.messageWrapper}>
-			<p>
-				{innerText}
-			</p>
-			<button className={style.editBtn} onClick={() => setInnerText(prompt())}>Edit</button>
-		</div>
-	)
+    if (LastMessage?.author !== 'Bot' && messages.length) {
+      timerId = setTimeout(()=>{
+        setMessages([...messages, {author: 'Bot', text: 'Hello from Bot'}])
+      }, 1500)
+    }
+
+    return () => clearInterval(timerId)
+  }, [messages])
+
+  return (
+    <div>
+      <MessageInput messages={messages} setMessages={setMessages}/>
+      <MessageList messages={messages}/>
+    </div>
+  )
 }
 
 
-const text = prompt();
-
 ReactDOM.render(
   <React.StrictMode>
-    <Message text={text}/>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
