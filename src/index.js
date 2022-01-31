@@ -1,28 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import style from './index.module.css';
+import ChatsList from './components/ChatsList/ChatsList';
+import Layout from './components/Layout/Layout';
+import MessageList from './components/MessageList/MessageList';
 import './index.css';
-
-
-const Message = ({text}) => {
-	const [innerText, setInnerText] = useState (text);
-
-	return (
-		<div className={style.messageWrapper}>
-			<p>
-				{innerText}
-			</p>
-			<button className={style.editBtn} onClick={() => setInnerText(prompt())}>Edit</button>
-		</div>
-	)
-}
-
-
-const text = prompt();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Message text={text}/>
+    <Layout
+      // header={<Header />}
+      chats={<ChatsList />}
+      messages={<MessageList />}
+    />
   </React.StrictMode>,
   document.getElementById('root')
 );
